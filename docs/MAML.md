@@ -5,7 +5,7 @@
 元学习和**终身学习（Life-long Learning）**的异同点：
 
 * 共同点：都是先让机器看过很多任务，希望机器能够在新的任务上仍然做的好。
-* 区别：终身学习用同一个模型学习，希望同一个模型能同时学会很多技能；元学习中，不同的任务有不同模型，希望机器可以从过去的学习经验中学到一些东西，在训练新模型时可以训练得又快又好。
+* 区别：终身学习用同一个模型学习，希望同一个模型能同时学会很多技能；元学习中，不同的任务有不同模型，希望机器可以从过去的学习经验中学到一些共用的先验知识，使得在训练新任务所用的模型时可以训练得又快又好。
 
 在标准的监督学习过程中，我们通过**学习算法（Learning Algorithm）**得到模型，这个模型可以被看作是一个映射函数，输入样本数据，输出预测标签；在元学习中，学习算法也被看作一个函数，这个函数的输入是训练数据，输出另一个函数，这个输出的函数就是模型。
 
@@ -33,25 +33,50 @@
 
 ## 元学习技术
 
-* MAML
-  * Chelsea Finn, Pieter Abbeel, Sergey Levine, "[Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks](https://arxiv.org/pdf/1703.03400.pdf)", ICML, 2017
+我们在这里介绍两种元学习的算法：
 
-* Reptile
-  * Alex Nichol, Joshua Achiam, John Schulman, "[On First-Order Meta-Learning Algorithms](https://arxiv.org/pdf/1803.02999.pdf)", arXiv, 2018
+* **MAML**: Chelsea Finn, Pieter Abbeel, Sergey Levine, "[Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks](https://arxiv.org/pdf/1703.03400.pdf)", ICML, 2017
+
+* **Reptile**: Alex Nichol, Joshua Achiam, John Schulman, "[On First-Order Meta-Learning Algorithms](https://arxiv.org/pdf/1803.02999.pdf)", arXiv, 2018
 
 ### MAML
 
-过去的神经网络的初始化参数都是从某一个分布中采样得到，**MAML（Model-Agnostic Meta-Learning）**要做的事情是学习出一个用于初始化的最好的参数 $\phi$。因此，MAML 要求所有的模型的结构必须一致。
+过去的神经网络的初始化参数都是从某一个分布中采样得到，**MAML（Model-Agnostic Meta-Learning）**算法要做的事情是学习出一组用于初始化的最好的神经网络参数 $\phi$。注意，虽然 MAML 可以翻译为“模型无关的元学习”，但是 MAML 要求训练和测试阶段的模型结构必须一致，因为它们需要共用同一组初始化参数。“模型无关”指训练和测试阶段的模型结构只需要一致，就可以自由选择使用的模型结构。
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-MAML.png)
 
-在将 $L(\phi)$ 最小化时，我们使用梯度下降，$\phi \leftarrow \phi-\eta \nabla\_{\phi} L(\phi)$ 。
+MAML 有以下优点：
 
-注意，我们不在意 $\phi$ 在训练任务上的直接表现，而在意用 $\phi$ 训练出来的 $\widehat{\theta}^{n}$ 的表现。模型预训练（Model Pre-training）看起来与 MAML 有相似之处，区别在于模型预训练试图找到在所有任务上都最好的 $\phi$，但并不保证拿 $\phi$ 去训练以后会得到好的 $\widehat{\theta}^{n}$。
+* 不需要为元学习过程引入额外的、需要学习的参数；
+* 可以在任何适合用基于梯度下降方法训练的模型，以及不同的可微分任务（包括分类、回归和强化学习）上使用；
+* 方法只生成一个初始化权重，可以使用任意数量的数据和梯度下降步骤来执行自适应。
 
-假设 MAML 中训练时参数只更新一次，则有 $\hat{\theta}=\phi-\varepsilon \nabla\_{\phi} l(\phi)$。只做一次参数更新的原因有：
+#### 符号表示
 
-* 元学习的训练的计算量很大，为了速度快，只更新一次参数；
+我们首先来规定在接下来的叙述中使用的符号表示：
+
+* $\phi$：对于所有任务使用的初始化参数；
+* $\phi^{i}$：$\phi$ 进行第 i 次更新后的值；
+* $\widehat{\theta}^{n}$：模型从任务 n 中学习到的参数，这个参数由 $\phi$ 进行更新得到；
+* $l^n(\widehat{\theta}^{n})$：模型参数为 $\widehat{\theta}^{n}$ 时在任务 n 的测试集上计算得到的损失；
+* $L(\phi) = \sum^N\_{n=1}l^n(\widehat{\theta}^{n})$：总体的损失函数；
+* $\eta$, $\varepsilon$：两个不同的学习率（值可以相同，但更多情况下不同）。
+
+#### 算法过程
+
+MAML 的训练过程描述如下：
+
+1. 随机初始化 $\phi$（即得到 $\phi^0$）；
+2. 从任务的概率分布中采样得到一批任务；
+3. 对于这批任务中的每个任务，计算 $\nabla\_{\phi} l(\phi)$，并得到对于该任务得到的自适应参数 $\hat{\theta}=\phi-\varepsilon \nabla\_{\phi} l(\phi)$；
+4. 更新 $\phi$：$\phi \leftarrow \phi-\eta \nabla\_{\phi} L(\phi)$；
+5. 循环第 2～4 步，直到训练结束。
+
+注意，我们不在意 $\phi$ 在训练任务上的直接表现，而在意用 $\phi$ 训练出来的 $\widehat{\theta}^{n}$ 在训练任务上的表现。模型预训练（Model Pre-training）看起来与 MAML 有相似之处，区别在于模型预训练试图找到在所有任务上直接表现最好的 $\phi$，但并不保证拿 $\phi$ 去训练以后会得到好的 $\widehat{\theta}^{n}$。
+
+从第 3 步的公式 $\hat{\theta}=\phi-\varepsilon \nabla\_{\phi} l(\phi)$ 可以看到，MAML 在对于每个任务进行参数的更新时只更新一次，原因有：
+
+* 元学习的训练的计算量很大，只更新一次参数能够提高计算速度；
 * 假设 MAML 能学习出一个非常好的初始化参数，我们希望能够只进行一次参数更新就得到最好的模型参数，因此将其作为目标来看能否实现；
 * 在实际测试时，如果只更新一次时效果不好，可以多更新几次；
 * 小样本学习的数据很少，多次更新参数容易导致过拟合。
@@ -62,11 +87,7 @@
 
 $$\begin{array}{l}{\phi \leftarrow \phi-\eta \nabla\_{\phi} L(\phi)} \\\ {L(\phi)=\sum\_{n=1}^{N} l^{n}\left(\hat{\theta}^{n}\right)} \\\ {\hat{\theta}=\phi-\varepsilon \nabla\_{\phi} l(\phi)}\end{array}$$
 
-其中，$\eta$ 和 $\varepsilon$ 是两个不同的学习率（值可以相同，但更多情况下不同）。
-
-这里，我们来推导一下梯度项 $\nabla\_{\phi} L(\phi)$ 是什么样子。
-
-将 $L(\phi)$ 替换，并将求和提取出来，则有：
+这里，我们来推导一下梯度项 $\nabla\_{\phi} L(\phi)$ 是什么样子。将 $L(\phi)$ 替换，并将求和提取出来，则有：
 
 $$\nabla\_{\phi} L(\phi)=\nabla\_{\phi} \sum\_{n=1}^{N} l^{n}\left(\hat{\theta}^{n}\right)=\sum\_{n=1}^{N} \nabla\_{\phi} l^{n}\left(\hat{\theta}^{n}\right)$$
 
@@ -80,9 +101,7 @@ $$\frac{\partial l(\hat{\theta})}{\partial \phi\_{i}}=\sum\_{j} \frac{\partial l
 
 $\phi\_{i}$ 是学习到的初始参数，它通过影响 $\hat{\theta}\_{1}, \hat{\theta}\_{2}, \dots, \hat{\theta}\_{j}$ 来最终影响 $l(\hat{\theta})$。
 
-$\frac{\partial l(\hat{\theta})}{\partial \hat{\theta}\_j}$ 与损失函数的形式，以及训练任务中的测试集有关，可以算出。
-
-现在来看 $\frac{\partial \hat{\theta}\_{j}}{\partial \phi\_{i}}$ 。从式子
+$\frac{\partial l(\hat{\theta})}{\partial \hat{\theta}\_j}$ 与损失函数的形式，以及训练任务中的测试集有关，可以算出。现在来看 $\frac{\partial \hat{\theta}\_{j}}{\partial \phi\_{i}}$ 。从式子
 
 $$\widehat{\theta}=\phi-\varepsilon \nabla\_{\phi} l(\phi)$$
 
@@ -106,30 +125,17 @@ $$\frac{\partial l(\hat{\theta})}{\partial \phi\_{i}}=\sum\_{j} \frac{\partial l
 
 $$\nabla\_{\phi} l(\hat{\theta})=\left[\begin{array}{c}{\partial l(\hat{\theta}) / \partial \phi\_{1}} \\\ {\partial l(\hat{\theta}) / \partial \phi\_{2}} \\\ {\vdots} \\\ {\partial l(\hat{\theta}) / \partial \phi\_{i}}\end{array}\right]=\left[\begin{array}{c}{\partial l(\hat{\theta}) / \partial \hat{\theta}\_{1}} \\\ {\partial l(\hat{\theta}) / \partial \hat{\theta}\_{2}} \\\ {\vdots} \\\ {\partial l(\hat{\theta}) / \partial \hat{\theta}\_{i}}\end{array}\right]=\nabla\_{\hat{\theta}} l(\hat{\theta})$$
 
-计算变得简单很多。
-
-#### MAML 的实际实现
-
-初始参数 $\phi$ 有一个初始值 $\phi^{0}$，每一个任务就是一个训练数据集，有一个 task batch，假设做随机梯度下降，那么实际实现的过程如下：
-
-1. 采样得到一个训练任务 m；
-2. 通过训练从 $\phi^{0}$ 更新一次参数，得到 $\hat{\theta}^m$；
-3. 计算 $\hat{\theta}^m$ 对其损失函数的偏微分（即梯度）；
-4. 用这个梯度将 $\phi^{0}$ 更新为 $\phi^{1}$；
-5. 重复第 1-4 步。
-
-![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-MAML-real-implementation.png)
-
-作为对比，模型预训练的区别是，$\phi$ 的更新是利用每次采样后的第一次参数更新的梯度。
+原论文表明这种优化方法使得计算速度提升了约 33%。并且通过测试发现，算法的效果没有受到明显的影响。
 
 ### Reptile
 
-同样，我们的初始参数 $\phi$ 有一个初始值 $\phi^{0}$。Reptile 的过程如下：
+Reptile 的训练过程如下：
 
-1. 采样得到一个训练任务 m；
-2. Reptile 不限制在一个训练任务上的参数更新次数，因此我们**多次**更新参数，得到 $\hat{\theta}^m$；
-3. 让 $\phi^{0}$ 沿着 $\phi^{0}$ 到 $\hat{\theta}^m$ 的方向更新一次，得到 $\phi^{1}$；
-4. 重复第 1-3 步。
+1. 随机初始化 $\phi$（即得到 $\phi^0$）；
+2. 从任务的概率分布中采样得到一批任务；
+3. Reptile 在具体任务上的参数更新方式与 MAML 相同，只是不限制在一个训练任务上的参数更新次数，因此我们**多次**更新参数，得到 $\hat{\theta}^m$；
+4. 让 $\phi^{0}$ 沿着 $\phi^{0}$ 到 $\hat{\theta}^m$ 的方向更新一次，得到 $\phi^{1}$；
+5. 循环第 2～4 步，直到训练结束。
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-Reptile.png)
 
@@ -139,7 +145,7 @@ $$\nabla\_{\phi} l(\hat{\theta})=\left[\begin{array}{c}{\partial l(\hat{\theta})
 
 可以看到，当我们要决定初始参数 $\phi$ 的更新方向时，我们先利用采样得到的训练任务进行两次更新，方向分别为 $g\_1$ 和 $g\_2$。那么，模型预训练中的 $\phi$ 更新方向为 $g\_1$，MAML 中的 $\phi$ 更新方向为 $g\_2$，而 Reptile 中的 $\phi$ 更新方向为 $g\_1 + g\_2$（当然，如之前所说，Reptile 没有限制只能走两步，这里只是以两次更新为例）。
 
-### 其他
+### 其他讨论
 
 MAML 和 Reptile 的目的都是找到神经网络最好的初始参数。当然也有一系列方法找更多有价值的东西，例如神经网络的架构（architecture），激活函数（activation function），或者更新参数的方法。这些都是通过训练一个神经网络，这个神经网络来输出以上内容。因为神经网络输出神经网络无法微分，因此需要利用强化学习或者遗传算法等来训练用来输出神经网络的神经网络。
 
