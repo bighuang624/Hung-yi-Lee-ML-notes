@@ -18,7 +18,7 @@
 
 ### 孪生网络
 
-**孪生网络（Siamese Network）**构造了一个双路的神经网络。一般来说，孪生网络内部的 CNN 的参数是共享的，即两个 CNN 的参数是一样的（也可以不一样）。
+**孪生网络（Siamese Network）**构造了一个双路的神经网络。一般来说，孪生网络内部的 CNN 的参数是共享的，即两个 CNN 的权重是一样的（如果两遍不共享权重，那么称为 Pseudo-siamese Network，伪孪生网络）。
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-Siamese-Network.png)
 
