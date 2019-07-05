@@ -5,13 +5,13 @@
 
 ## Autoencoder 的另一种形式
 
-显然，我们期待学习到的表征具有代表性。那么我们现在有一个编码器（encoder），想要评估它的质量，就需要知道这个编码器输出的表征是否具有代表性。因此，我们训练一个判别器（discriminator），可以认为是一个二元分类器（binary classifier），每次输入一张图片和一个通过编码器得到的表征，分辨它们是否是对应的。设判别器的参数为 $\phi$，那么我们训练 $\phi$ 来最小化这个分类任务的损失 $L_D$，来得到损失的最小值 $L_{D}^{*}=\min _{\phi} L_{D}$。如果 $L_{D}^{*}$ 很小，说明训练的结果很好，认为表征非常具有代表性，二元分类器可以容易地判断哪些图片和表征是对应的；如果 $L_{D}^{*}$ 很大，说明不同图片得到的表征也很相似，因此学习到的表征不具有代表性。
+显然，我们期待学习到的表征具有代表性。那么我们现在有一个编码器（encoder），想要评估它的质量，就需要知道这个编码器输出的表征是否具有代表性。因此，我们训练一个判别器（discriminator），可以认为是一个二元分类器（binary classifier），每次输入一张图片和一个通过编码器得到的表征，分辨它们是否是对应的。设判别器的参数为 $\phi$，那么我们训练 $\phi$ 来最小化这个分类任务的损失 $L\_D$，来得到损失的最小值 $L\_{D}^{'}=\min \_{\phi} L\_{D}$。如果 $L\_{D}^{'}$ 很小，说明训练的结果很好，认为表征非常具有代表性，二元分类器可以容易地判断哪些图片和表征是对应的；如果 $L\_{D}^{'}$ 很大，说明不同图片得到的表征也很相似，因此学习到的表征不具有代表性。
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-Autoencoder-beyond-reconstruction.png)
 
-根据以上分析，我们可以提出一个新的训练编码器的方法，那就是训练编码器，让已经训练好的这个判别器进行评估时可以得到好的结果，即训练编码器 $\theta$ 使得 $L_{D}^{*}$ 最小，因此有  $\theta^{*}=\arg \min _{\theta} L_{D}^{*} = \arg \min _{\theta} \min _{\phi} L_{D}$。
+根据以上分析，我们可以提出一个新的训练编码器的方法，那就是训练编码器，让已经训练好的这个判别器进行评估时可以得到好的结果，即训练编码器 $\theta$ 使得 $L\_{D}^{'}$ 最小，因此有 $\theta^{'}=\arg \min \_{\theta} L\_{D}^{'} = \arg \min \_{\theta} \min \_{\phi} L\_{D}$。
 
-从这个式子可以看出，我们要同时训练一个最好的编码器 $\theta$ 和一个最好的判别器 $\phi$ 来一起最小化 $L_{D}$。这种技术被被 ICLR 2019 上的论文 "[Learning deep representations by mutual information estimation and maximization](https://arxiv.org/pdf/1808.06670.pdf)" 提出的 Deep InfoMax (DIM) 方法所使用。
+从这个式子可以看出，我们要同时训练一个最好的编码器 $\theta$ 和一个最好的判别器 $\phi$ 来一起最小化 $L\_{D}$。这种技术被被 ICLR 2019 上的论文 "[Learning deep representations by mutual information estimation and maximization](https://arxiv.org/pdf/1808.06670.pdf)" 提出的 Deep InfoMax (DIM) 方法所使用。
 
 我们会发现，这个形式与通常的 Autoencoder 中，我们要同时训练编码器和解码器来最小化重构误差的情况非常相似。因此，其实我们熟悉的 Autoencoder 就是上述使用判别器方法的一个特例。上述方法中，判别器将一张图片和一个表征向量作为输入，输入一个分数值来表示图片和表征向量是否对应。我们假设判别器的运作方式是其内部有一个解码器，这个解码器把表征向量作为输入，输出一张与判别器输入图片大小相同的图片，然后将生成的这张图片与判别器输入图片相减，那么输出的分数实际就是重构误差。只不过 Autoencoder 中我们只考虑正例（positive examples），而使用判别器时我们还会考虑负例（negative examples），也就是输入的图片与表征向量不对应的情况。
 
@@ -75,10 +75,20 @@ ICLR 2018 上的论文 "[An efficient framework for learning sentence representa
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Auto%20(v3).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML\_2019/Lecture/Auto%20(v3).pdf)
 * [深度学习的互信息：无监督提取特征 - 科学空间|Scientific Spaces](https://kexue.fm/archives/6024)
 * Skip-Thought Vectors 相关论文
   * Shuai Tang, Hailin Jin, Chen Fang,
 et al., "[Trimming and Improving Skip-thought Vectors](https://arxiv.org/pdf/1706.03148.pdf)". arXiv, 2017
   * Afroz Ahamad, "[Generating Text through Adversarial Training Using Skip-Thought Vectors](https://www.aclweb.org/anthology/N19-3008)". NAACL-HLT (Student Research Workshop) 2019
 * [连续特征的离散化：在什么情况下将连续的特征离散化之后可以获得更好的效果？ - 知乎](https://www.zhihu.com/question/31989952)
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [ ['$', '$'] ],
+        displayMath: [ ['$$', '$$']]}
+});
+</script>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=default"></script>
