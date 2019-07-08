@@ -43,11 +43,11 @@ ICLR 2018 上的论文 "[An efficient framework for learning sentence representa
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-feature-disentangle-designed-network-architecture.png)
 
-更简洁的方式是设计新的编码器架构，能够过滤不要的信息，只包含我们需要的信息。例如，我们可以给第一个编码器加上 instance normalization，这是一个特别设计的层，能够过滤掉一些全局的信息，指处理对象的每一个部分都有的信息。这样，第一个编码器在处理语音时就能够过滤掉说话人的声音信息，只保留内容信息。
+更简洁的方式是设计新的编码器架构，能够过滤不要的信息，只包含我们需要的信息。例如，我们可以给第一个编码器加上 instance normalization（IN），这是一个特别设计的层，能够过滤掉一些全局的、处理对象的每一个部分都有的信息。这样，第一个编码器在处理语音时就能够过滤掉说话人的声音信息，只保留内容信息。
 
-如果要实现实现变声器，我们就需要第二个编码器只保留说话人的声音信息。这里，我们可以在**解码器**上加上一个 adaptive instance normalization，而将第二个编码器的输出在输入解码器时先经过这个层。adaptive instance normalization 能够调整输出的全局信息，因此这个层可以改变整个句子的所有部分。因此第二个编码器会学习将语音内容的信息过滤掉，因为如果保留，语音内容会改变整个句子，无法重构。这样，解码器将第一个编码器的输入当作通常的输入，而将第二个编码器的输出做特别的处理，最后重构语音信号。
+如果要实现实现变声器，我们就需要第二个编码器只保留说话人的声音信息。这里，我们可以在**解码器**上加上一个 adaptive instance normalization（AdaIN），而将第二个编码器的输出在输入解码器时先经过这个层。在 AdaIN 层中，解码器首先通过 IN 层对全局信息进行正则化，然后让第二个编码器来提供这些全局信息。第二个编码器能够通过调整输出的全局信息改变整个句子的所有部分，因此会学习将语音内容的信息过滤掉，因为如果保留，语音内容会改变整个句子，无法重构。这样，解码器将第一个编码器的输入当作通常的输入，而将第二个编码器的输出做特别的处理，最后重构语音信号。
 
-【注：我对这部分内容老师的讲述没有完全理解，但是老师没有给出对应的论文。这部分内容有待修改。】
+上述内容出自 Interspeech 2019 上的论文 "[One-shot Voice Conversion by Separating Speaker and Content Representations with Instance Normalization](https://arxiv.org/pdf/1904.05742.pdf)"。
 
 ## 离散表征
 
