@@ -3,11 +3,12 @@
   - [Gradient Descent as LSTM](Gradient-Descent-as-LSTM.md)
   - [Metric-based Approach](Metric-based-Approach.md) 
 - Autoencoder
-  - [More Autoencoder](More-Autoencoder.md) 
+  - [More Autoencoder](More-Autoencoder.md)
+- Anomaly Detection  
+  - [Anomaly Detection](Anomaly-Detection.md)
 
 
-
-<!--* [Anomaly Detection](Anomaly-Detection.md)
+<!--
 * [Adversarial Attack]()
 * [Training Deep Models]()
 * [Explainable ML]()
