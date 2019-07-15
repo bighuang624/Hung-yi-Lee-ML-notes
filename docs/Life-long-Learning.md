@@ -2,9 +2,9 @@ Life-Long Learning，又称 Continuous Learning, Never Ending Learning, Incremen
 
 为了实现这个目标，我们需要至少解决三个问题：
 
-* Knowledge Retention（知识保留）
-* Knowledge Transfer（知识迁移）
-* Model Expansion（模型扩张）
+* **Knowledge Retention（知识保留）**
+* **Knowledge Transfer（知识迁移）**
+* **Model Expansion（模型扩张）**
 
 ## 知识保留
 
@@ -32,8 +32,7 @@ EWC 的效果对比如下图所示，可以看到普通的 SGD 容易在学习�
 
 EWC 有很多变形，这里提供三篇相关论文：
 
-* Elastic Weight Consolidation (EWC)
-* http://www.citeulike.org/group/15400/article/14311063
+* Elastic Weight Consolidation (EWC): [Overcoming catastrophic forgetting in neural networks](https://www.pnas.org/content/114/13/3521?__hstc=200028081.1bb630f9cde2cb5f07430159d50a3c91.1524182400081.1524182400082.1524182400083.1&__hssc=200028081.1.1524182400084&__hsfp=1773666937), 2017
 * Synaptic Intelligence (SI): [Continual Learning Through Synaptic Intelligence](https://arxiv.org/pdf/1703.04200.pdf), ICML 2017
 * Memory Aware Synapses (MAS): [Memory Aware Synapses: Learning what (not) to forget](https://arxiv.org/pdf/1711.09601.pdf), ECCV 2018
   * 计算二次微分需要有 loss，因此需要标签，但是这个方法的特别之处是不需要标签
