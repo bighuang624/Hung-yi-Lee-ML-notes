@@ -6,6 +6,8 @@
   - [More Autoencoder](More-Autoencoder.md)
 - Anomaly Detection  
   - [Anomaly Detection](Anomaly-Detection.md)
+- Life-long Learning 
+  - [Life-long Learning](Life-long-Learning.md)
 
 
 <!--
