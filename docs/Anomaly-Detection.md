@@ -82,7 +82,7 @@ $$\Sigma^{'}=\frac{1}{N} \sum\_{n=1}^{N}\left(x-\mu^{'}\right)\left(x-\mu^{'}\ri
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML\_2019/Lecture/Detection%20(v9).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Detection%20(v9).pdf)
 * [异常检测（anomaly/ outlier detection）领域还有那些值得研究的问题？ - 知乎](https://www.zhihu.com/question/324999831/answer/716118043)
 
 

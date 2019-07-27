@@ -75,7 +75,7 @@ ICLR 2018 上的论文 "[An efficient framework for learning sentence representa
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML\_2019/Lecture/Auto%20(v3).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Auto%20(v3).pdf)
 * [深度学习的互信息：无监督提取特征 - 科学空间|Scientific Spaces](https://kexue.fm/archives/6024)
 * Skip-Thought Vectors 相关论文
   * Shuai Tang, Hailin Jin, Chen Fang,

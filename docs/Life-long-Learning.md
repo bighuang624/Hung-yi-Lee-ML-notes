@@ -1,4 +1,4 @@
-Life-Long Learning，又称 Continuous Learning, Never Ending Learning, Incremental Learning，翻译为中文即是“终身学习”。人类在学习不同事情、在不同阶段的学习中都使用同一个大脑，但是在进行机器学习时，对于不同任务我们训练不同的模型。因此，我们很容易想到，我们能否对于所有任务都训练同一个模型，让这个模型最终能够拥有解决多个任务的能力。
+**Life-Long Learning（终身学习）**，又称 Continuous Learning, Never Ending Learning, Incremental Learning。人类在学习不同事情、在不同阶段的学习中都使用同一个大脑，但是在进行机器学习时，对于不同任务我们训练不同的模型。因此，我们很容易想到，我们能否对于所有任务都训练同一个模型，让这个模型最终能够拥有解决多个任务的能力。
 
 为了实现这个目标，我们需要至少解决三个问题：
 
@@ -8,7 +8,7 @@ Life-Long Learning，又称 Continuous Learning, Never Ending Learning, Incremen
 
 ## 知识保留
 
-**Knowledge Retention（知识保留）**是要实现终身学习要面临的最难的一个问题。我们要求模型在不能忘记旧的知识的同时，还要持续学会新的东西。然而，在新的任务上更新参数后，同一个模型在原来的任务上的表现不可避免地会下降。我们将模型这种学会新任务就忘记旧任务的情况叫做 Catastrophic Forgetting（灾难性遗忘），因为和人类相比，机器的这种遗忘更加让人难以接受。下图形象地展示了模型在学习新任务后在旧任务上表现较差地原因。
+**Knowledge Retention（知识保留）**是要实现终身学习要面临的最难的一个问题。我们要求模型在不能忘记旧的知识的同时，还要持续学会新的东西。然而，在新的任务上更新参数后，同一个模型在原来的任务上的表现不可避免地会下降。我们将模型这种学会新任务就忘记旧任务的情况叫做 Catastrophic Forgetting（灾难性遗忘），因为和人类相比，机器的这种遗忘更加让人难以接受。下图形象地展示了模型在学习新任务后在旧任务上表现较差的原因。
 
 ![](https://raw.githubusercontent.com/bighuang624/pic-repo/master/Hung-yi-Lee-Catastrophic-Forgetting.png)
 
@@ -112,7 +112,7 @@ CVPR 2018 的最佳论文 "[Taskonomy: Disentangling Task Transfer Learning](htt
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML\_2019/Lecture/Lifelong%20Learning%20(v9).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Lifelong%20Learning%20(v9).pdf)
 
 
 <script type="text/x-mathjax-config">

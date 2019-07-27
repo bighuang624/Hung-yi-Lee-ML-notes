@@ -8,7 +8,8 @@
   - [Anomaly Detection](Anomaly-Detection.md)
 - Life-long Learning 
   - [Life-long Learning](Life-long-Learning.md)
-
+- Network Compression
+  - [Network Compression](Network-Compression.md) 
 
 <!--
 * [Adversarial Attack]()

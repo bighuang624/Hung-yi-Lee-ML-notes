@@ -159,7 +159,7 @@ https://www.youtube.com/watch?v=c10nxBcSH14)
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/%7Etlkagk/courses/ML\_2019/Lecture/Meta1%20(v6).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/%7Etlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf)
 * Demo of Reptile: [https://openai.com/blog/reptile](https://openai.com/blog/reptile)
 
 <script type="text/x-mathjax-config">

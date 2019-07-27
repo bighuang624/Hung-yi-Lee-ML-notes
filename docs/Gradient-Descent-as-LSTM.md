@@ -59,7 +59,7 @@ $$\theta^{t}=\theta^{t-1}-\eta \nabla\_{\theta} l$$
 
 ## 参考资料
 
-* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML\_2019/Lecture/Meta2%20(v4).pdf)
+* 本节内容对应的 [PPT](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta2%20(v4).pdf)
 
 
 
