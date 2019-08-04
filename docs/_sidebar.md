@@ -10,6 +10,9 @@
   - [Life-long Learning](Life-long-Learning.md)
 - Network Compression
   - [Network Compression](Network-Compression.md) 
+- Special Training Technology
+  - [Automatically Determining Hyperparameters](Automatically-Determining-Hyperparameters.md) 
+
 
 <!--
 * [Adversarial Attack]()
